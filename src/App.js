@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { moviesList } from "./actions";
+import { bindActionCreators } from "redux";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  componentDidMount() {
+    // this.props.dispatch(actions.moviesList());
+    this.props.moviesList();
+  }
+  render() {
+    return (
+      <div>
+        {this.props.movies
+          ? this.props.movies.map(item => <div key={item.id}>{item.name}</div>)
+          : null}
+      </div>
+    );
+  }
 }
 
-export default App;
+function mapStateToProps(state) {
+  console.log(state);
+  return {
+    movies: state.movies
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ moviesList }, dispatch);
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
